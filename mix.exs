@@ -17,25 +17,21 @@ defmodule TwitterBusinessAnalysis.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [
       extra_applications: [
+        :httpoison,
         :logger,
-        :httpoison
+        :simple_bayes,
+        :stemmer
       ]
     ]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:my_dep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:my_dep, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:csv, "~> 1.4.2"},
       {:httpoison, "~> 0.10.0"},
-      {:poison, "~> 3.0"}
+      {:poison, "~> 3.0"},
+      {:simple_bayes, "~> 0.11.0"},
+      {:stemmer,      "~> 1.0"}
     ]
   end
 end

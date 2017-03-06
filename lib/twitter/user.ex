@@ -4,7 +4,7 @@ defmodule User do
   """
   def get(handle) do
     Request.get!(
-      "/1.1/users/show.json?screen_name=#{handle}&include_entities=true"
+      "1.1/users/show.json?screen_name=#{handle}&include_entities=true"
     ).body |> process_response
   end
 
@@ -22,23 +22,7 @@ defmodule User do
       handle: response["screen_name"],
       description: response["description"],
       favorites_count: response["favourites_count"],
-      last_tweet: last_tweet(response["status"])
+      last_tweet: TweetResponse.process_response(response["status"])
     }
-  end
-
-  defp last_tweet(status) do
-    %{
-      hashtags: status["entities"]["hashtags"],
-      tweet_time: status["created_at"],
-      favorited_count: status["favorite_count"],
-      tracked_location: status["geo"],
-      text: status["text"], #TODO remove urls, hashtags, and mentions?,
-      mentions: mentions(status["entities"]["user_mentions"]),
-      retweet_count: status["retweet_count"]
-    }
-  end
-
-  defp mentions(user_mentions) do
-    "Not yet implemented"
   end
 end
