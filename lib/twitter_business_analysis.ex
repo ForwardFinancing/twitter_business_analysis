@@ -8,7 +8,7 @@ defmodule TwitterBusinessAnalysis do
     HTTPoison.start
     authorization_token = Token.token
     user = User.get("iamdevloper")
-    timeline = Timeline.get("iamdevloper", 600) |> Enum.map(fn (tweet) ->
+    timeline = Timeline.get("iamdevloper", 1000) |> Enum.map(fn (tweet) ->
       # Insert sentiment analysis into twitter data
       tweet |> Map.put(
         :sentiment,
@@ -16,8 +16,8 @@ defmodule TwitterBusinessAnalysis do
       )
     end)
     IO.inspect timeline
-    require IEx
-    IEx.pry
+    # require IEx
+    # IEx.pry
   end
 end
 TwitterBusinessAnalysis.do_that_thang

@@ -2,11 +2,26 @@ defmodule TrainingModel do
   # Loads the tweet corpus into the model
   def training_model do
     # Open the small dataset
-    HTTPoison.start
-    csv_stream = HTTPoison.get!(
-      "https://s3-us-west-2.amazonaws.com/twitter-business-analysis/large.csv"
-    ).body |> String.split("\n") |> List.delete("") |> CSV.decode
-    train_model(SimpleBayes.init(stem: &Stemmer.stem/1), csv_stream)
+    corpus = "small"
+    options = [
+      file_path: "#{corpus}.dump",
+      stem: &Stemmer.stem/1,
+      storage: :file_system
+    ]
+    if File.exists?("#{corpus}.dump") do
+      SimpleBayes.load(options)
+    else
+      HTTPoison.start
+      csv_stream = HTTPoison.get!(
+        "https://s3-us-west-2.amazonaws.com/twitter-business-analysis/#{corpus}.csv"
+      ).body |> String.split("\n") |> List.delete("") |> CSV.decode
+      model = train_model(
+        SimpleBayes.init(options),
+        csv_stream
+      )
+      model |> SimpleBayes.save()
+      model
+    end
   end
 
   defp train_model(model, csv_stream) do
