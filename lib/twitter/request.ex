@@ -2,6 +2,7 @@ defmodule Request do
   use HTTPoison.Base
 
   def process_url(path) do
+    IO.puts("https://api.twitter.com/" <> path)
     "https://api.twitter.com/" <> path
   end
 
