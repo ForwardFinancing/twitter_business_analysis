@@ -17,6 +17,7 @@ defmodule TwitterBusinessAnalysis.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [
       extra_applications: [
+        :exredis,
         :httpoison,
         :logger,
         :simple_bayes,
@@ -28,6 +29,7 @@ defmodule TwitterBusinessAnalysis.Mixfile do
   defp deps do
     [
       {:csv, "~> 1.4.2"},
+      {:exredis, "~> 0.2.4"},
       {:httpoison, "~> 0.10.0"},
       {:poison, "~> 3.0"},
       {:simple_bayes, "~> 0.11.0"},
