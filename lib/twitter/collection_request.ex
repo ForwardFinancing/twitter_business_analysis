@@ -3,15 +3,25 @@ defmodule CollectionRequest do
     do_get(endpoint, params, max, count, nil, path)
   end
 
-  defp do_get(endpoint, params, max, count, max_id, path \\ [], acc \\ []) do
+  defp do_get(
+    endpoint,
+    params,
+    max,
+    count,
+    max_id,
+    path \\ [],
+    acc \\ [],
+    last_max_id \\ 0
+  ) do
     params = params |> Map.put("count", count)
     if max_id do
       params = params |> Map.put("max_id", max_id)
     end
 
-    if Enum.count(acc) >= max do
-      # TODO must provide max for now, need to find a way to break if
-      #   no more tweets to return
+    # Break and return if we either:
+    #   1) Have enough tweets
+    #   2) Reach the end (the max_id will be same as the one before that)
+    if Enum.count(acc) >= max || max_id == last_max_id do
       # Since we might have a few extra tweets, return the first `max` tweets
       acc |> Enum.take(max)
     else
@@ -37,7 +47,8 @@ defmodule CollectionRequest do
         count,
         min_id,
         path,
-        acc ++ (response |> Enum.map(&(TweetResponse.process_response(&1))))
+        acc ++ (response |> Enum.map(&(TweetResponse.process_response(&1)))),
+        max_id
       )
     end
   end
